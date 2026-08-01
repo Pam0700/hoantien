@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Shopee Affiliate Link Generator</title>
+<style>
+body{font-family:Arial,sans-serif;background:#f5f5f5;margin:0;padding:30px}
+.card{max-width:720px;margin:auto;background:#fff;padding:24px;border-radius:12px;box-shadow:0 2px 10px rgba(0,0,0,.1)}
+input,textarea{width:100%;padding:10px;margin:8px 0;border:1px solid #ccc;border-radius:8px;box-sizing:border-box}
+button{padding:10px 18px;border:none;border-radius:8px;background:#ee4d2d;color:#fff;cursor:pointer;margin-right:8px}
+textarea{height:120px}
+small{color:#666}
+</style>
+</head>
+<body>
+<div class="card">
+<h2>Tạo Link Shopee Affiliate</h2>
+<label>Link Shopee</label>
+<input id="url" placeholder="https://shopee.vn/...">
+<label>Sub ID (tùy chọn)</label>
+<input id="sub" placeholder="tiktok-video01">
+<button onclick="gen()">Tạo Link</button>
+<button onclick="copy()">Sao chép</button>
+<textarea id="out" readonly></textarea>
+<small>Affiliate ID: 1700330510</small>
+</div>
+<script>
+const AFFILIATE_ID="1700330510";
+function gen(){
+ const u=document.getElementById("url").value.trim();
+ if(!u){alert("Nhập link Shopee");return;}
+ let url;
+ try{url=new URL(u.startsWith("http")?u:"https://"+u);}catch(e){alert("Link không hợp lệ");return;}
+ const host=url.hostname.toLowerCase();
+ if(!(host==="shopee.vn"||host.endsWith(".shopee.vn"))){alert("Chỉ hỗ trợ shopee.vn");return;}
+ const sub=document.getElementById("sub").value.trim();
+ let out="https://s.shopee.vn/an_redir?origin_link="+encodeURIComponent(url.toString())+"&affiliate_id="+encodeURIComponent(AFFILIATE_ID);
+ if(sub) out+="&sub_id="+encodeURIComponent(sub);
+ document.getElementById("out").value=out;
+}
+async function copy(){
+ const t=document.getElementById("out");
+ if(!t.value)return;
+ await navigator.clipboard.writeText(t.value);
+ alert("Đã sao chép");
+}
+</script>
+</body>
+</html>
