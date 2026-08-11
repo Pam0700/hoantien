@@ -1,13 +1,13 @@
 const express = require('express');
 const cors = require('cors');
-const puppeteer = require('puppeteer');
+const puppeteer = require('puppeteer-core');
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
 const SHOPEE_COOKIES = [
-  // Dán Cookie Shopee Affiliate của bạn vào đây
+  // Dán Cookie Shopee Affiliate của bạn vào đây (nếu có)
 ];
 
 app.post('/api/convert', async (req, res) => {
@@ -18,7 +18,7 @@ app.post('/api/convert', async (req, res) => {
   try {
     browser = await puppeteer.launch({
       headless: 'new',
-      executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || null,
+      executablePath: '/usr/bin/google-chrome-stable',
       args: [
         '--no-sandbox',
         '--disable-setuid-sandbox',
