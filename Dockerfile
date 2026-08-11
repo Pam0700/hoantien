@@ -1,13 +1,24 @@
-FROM ghcr.io/puppeteer/puppeteer:21.5.0
+FROM node:18-alpine
 
+# Cài đặt Chromium trực tiếp từ kho gói siêu nhẹ của Alpine
+RUN apk add --no-cache \
+    chromium \
+    nss \
+    freetype \
+    harfbuzz \
+    ca-certificates \
+    ttf-freefont
+
+# Khai báo không tải Chromium của Puppeteer để tiết kiệm bộ nhớ
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true \
-    PUPPETEER_EXECUTABLE_PATH=/usr/bin/google-chrome-stable
+    PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser
 
-USER root
-WORKDIR /usr/src/app
+WORKDIR /app
 
 COPY package*.json ./
-RUN npm install --no-audit --no-fund
+
+# Cài đặt bản Production chống ngốn RAM
+RUN npm install --production --no-audit --no-fund
 
 COPY . .
 
